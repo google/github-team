@@ -1,3 +1,4 @@
+### Required actions to scan GitHub action workflows for security issues.
 name: Scan GitHub Action workflows files for security issues
 
 on:
