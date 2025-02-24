@@ -3,7 +3,7 @@ rules:
     languages:
       - yaml
     severity: ERROR
-    message: pull_request_target is considered very risky and should only be used when striclty needed.  Please prefer other triggers when possible.
+    message: pull_request_target is considered very risky and should only be used when striclty needed.  Please prefer other triggers when possible.  If you think this is needed, you can dismiss this alert and merge your PR.
     metadata:
       category: best-practice
       technology:
