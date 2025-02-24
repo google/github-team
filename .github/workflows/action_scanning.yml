@@ -5,9 +5,9 @@ on:
   pull_request: {}
   workflow_dispatch: {}
   push:
-     paths:
+    paths:
       - '.github/workflows/**.ya?ml'
-   schedule:
+  schedule:
     - cron: '39 3 * * 3'
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
       
-    - name Initialize CodeQL
+    - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: actions
