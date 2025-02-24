@@ -2,9 +2,7 @@
 name: Scan GitHub Action workflows files for security issues
 
 on:
-  pull_request: 
-     paths:
-      - '.github/workflows/**.ya?ml'
+  pull_request: {}
   workflow_dispatch: {}
   push:
      paths:
