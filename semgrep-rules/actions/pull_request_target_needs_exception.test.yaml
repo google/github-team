@@ -1,0 +1,3 @@
+on:
+  # ruleid: pull-request-target-needs-exception
+  pull_request_target:
