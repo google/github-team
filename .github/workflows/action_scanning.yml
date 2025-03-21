@@ -3,12 +3,6 @@ name: Scan GitHub Action workflows files for security issues
 
 on:
   pull_request: {}
-  workflow_dispatch: {}
-  push:
-    paths:
-      - '.github/workflows/**.ya?ml'
-  schedule:
-    - cron: '39 3 * * 3'
 
 permissions:
   contents: read
