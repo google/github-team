@@ -24,4 +24,4 @@ jobs:
         uses: actions/checkout@v4    
     
       - name: Run Actions semgrep scan
-        run: semgrep --test semgrep-rules
+        run: semgrep --test --config semgrep-rules semgrep-tests
