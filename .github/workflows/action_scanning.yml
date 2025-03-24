@@ -15,34 +15,34 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     container:
-      image: 'semgrep/semgrep'
+      image: 'index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89' # ratchet:semgrep/semgrep
 
     # Skip any PR created by dependabot to avoid permission issues:
     if: (github.actor != 'dependabot[bot]')
 
     steps:
       - name: 'Checkout Code'
-        uses: actions/checkout@v4    
-        
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+
       - name: 'Checkout Workflow Config'
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         env:
           GH_REPO_OWNER: ${{ github.repository_owner }}
         with:
           repository: 'google/github-team'
           path: action_scanning
-    
+
       - name: 'Run Actions semgrep scan'
         run: 'semgrep scan --sarif --config action_scanning/semgrep-rules/actions >> semgrep-results-actions.sarif'
-    
+
       - name: 'Save Actions SARIF results as artifact'
-        uses: 'actions/upload-artifact@v4'
+        uses: 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' # ratchet:actions/upload-artifact@v4
         with:
           name: 'semgrep-scan-results-actions'
           path: 'semgrep-results-actions.sarif'
-    
+
       - name: 'Upload Actions SARIF result to the GitHub Security Dashboard'
-        uses: 'github/codeql-action/upload-sarif@v3'
+        uses: 'github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841' # ratchet:github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'semgrep-results-actions.sarif'
         if: always()
