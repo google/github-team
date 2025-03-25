@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '**.md'
+      - '.github/workflow/publish*'
   workflow_dispatch:
 
 permissions:
@@ -12,7 +15,7 @@ permissions:
 
 jobs:
   build-and-deploy:
-    name: "Build and DeployDocs"
+    name: "Build and Deploy Docs"
     runs-on: 'ubuntu-latest'
     steps:
     - uses: 'actions/checkout@v4'
