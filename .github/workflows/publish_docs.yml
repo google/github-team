@@ -22,6 +22,11 @@ jobs:
       uses: 'actions/upload-pages-artifact@v3'
       with:
         path: 'generated-pages'
+    - name: 'Deploy GitHub Pages Preview'
+      if: github.ref == 'refs/heads/main'
+      uses: rossjrw/pr-preview-action@v1
+      with:
+        source-dir: ./generated-pages/
   deploy:
     if: github.ref == 'refs/heads/main'
     environment:
