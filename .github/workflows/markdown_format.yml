@@ -1,0 +1,19 @@
+### Ensure that markdown files are properly formatted
+name: 'Check Markdown Format'
+
+on:
+  pull_request: 
+    paths:
+      - '**.md'
+
+jobs:
+  mdformat:
+    name: 'mdformat'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: 'Checkout Code'
+        uses: 'actions/checkout@v4'
+
+      - name: 'Check Markdown Format'
+        run: 'pipx run mdformat --check --wrap 100 .'

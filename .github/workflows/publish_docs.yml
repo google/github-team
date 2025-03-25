@@ -1,0 +1,38 @@
+name: 'Publish Docs Site'
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  pages: 'write'
+  id-token: 'write'
+
+jobs:
+  build:
+    name: "Build Docs"
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: 'actions/checkout@v4'
+    - name: 'Generate HTML from Markdown'
+      uses: 'ldeluigi/markdown-docs@latest'
+      with:
+        src: 'docs'
+        dst: 'generated-pages'
+    - name: 'Upload artifact'
+      uses: 'actions/upload-pages-artifact@v3'
+      with:
+        path: 'generated-pages'
+  deploy:
+    name: "Deploy Docs"
+    environment:
+      name: 'github-pages'
+      url: '${{ steps.deployment.outputs.page_url }}'
+    runs-on: 'ubuntu-latest'
+    needs: 'build'
+    steps:
+      - name: 'Deploy to GitHub Pages'
+        id: 'deployment'
+        uses: 'actions/deploy-pages@v4'
