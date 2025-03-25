@@ -12,6 +12,8 @@
         <link rel="prev" href="code-of-conduct.html">
       
       
+        <link rel="next" href="semgrep-rules/pull-request-target-needs-exception.html">
+      
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
@@ -417,6 +419,69 @@
   
   
   
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Semgrep rules
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Semgrep rules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="semgrep-rules/pull-request-target-needs-exception.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pull-request-target-needs-exception
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="print_page.html" class="md-nav__link">
         
@@ -535,22 +600,19 @@
 <h2 id="before-you-begin">Before you begin</h2>
 <h3 id="sign-our-contributor-license-agreement">Sign our Contributor License Agreement</h3>
 <p>Contributions to this project must be accompanied by a<br />
-<a href="https://cla.developers.google.com/about">Contributor License Agreement</a> (CLA).<br />
-You (or your employer) retain the copyright to your contribution; this simply<br />
-gives us permission to use and redistribute your contributions as part of the<br />
-project.</p>
-<p>If you or your current employer have already signed the Google CLA (even if it<br />
-was for a different project), you probably don't need to do it again.</p>
-<p>Visit <a href="https://cla.developers.google.com/">https://cla.developers.google.com/</a> to see your current agreements or to<br />
-sign a new one.</p>
+<a href="https://cla.developers.google.com/about">Contributor License Agreement</a> (CLA). You (or your<br />
+employer) retain the copyright to your contribution; this simply gives us permission to use and<br />
+redistribute your contributions as part of the project.</p>
+<p>If you or your current employer have already signed the Google CLA (even if it was for a different<br />
+project), you probably don't need to do it again.</p>
+<p>Visit <a href="https://cla.developers.google.com/">https://cla.developers.google.com/</a> to see your current agreements or to sign a new one.</p>
 <h3 id="review-our-community-guidelines">Review our Community Guidelines</h3>
-<p>This project follows <a href="https://opensource.google/conduct/">Google's Open Source Community<br />
-Guidelines</a>.</p>
+<p>This project follows<br />
+<a href="https://opensource.google/conduct/">Google's Open Source Community Guidelines</a>.</p>
 <h2 id="contribution-process">Contribution process</h2>
 <h3 id="code-reviews">Code Reviews</h3>
-<p>All submissions, including submissions by project members, require review. We<br />
-use <a href="https://docs.github.com/articles/about-pull-requests">GitHub pull requests</a><br />
-for this purpose.</p>
+<p>All submissions, including submissions by project members, require review. We use<br />
+<a href="https://docs.github.com/articles/about-pull-requests">GitHub pull requests</a> for this purpose.</p>
 
 
 
@@ -573,7 +635,7 @@ for this purpose.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">March 25, 2025 05:41:14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">March 25, 2025 16:16:57</span>
   </span>
 
     
@@ -583,7 +645,7 @@ for this purpose.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">March 25, 2025 05:41:14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-datetime">March 25, 2025 16:16:57</span>
   </span>
 
     
