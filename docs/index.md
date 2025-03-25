@@ -1,3 +1,3 @@
 # GitHub Source Solutions
 
-- [Google Specifc SemGrep Rules](semgrep-rules)
+A collection of things we use to manage the Google Enterprise presence on GitHub.
