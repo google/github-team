@@ -360,27 +360,6 @@
   
   
     <li class="md-nav__item">
-      <a href="semgrep-rules/index.html" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Index
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="semgrep-rules/pull-request-target-needs-exception.html" class="md-nav__link">
         
   
@@ -486,18 +465,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#semgrep-rules-index" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Index
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#semgrep-rules-pull-request-target-needs-exception" class="md-nav__link">
     <span class="md-ellipsis">
-      5. pull-request-target-needs-exception
+      4. pull-request-target-needs-exception
     </span>
   </a>
   
@@ -578,18 +548,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#semgrep-rules-index" class="md-nav__link">
-    <span class="md-ellipsis">
-      4. Index
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#semgrep-rules-pull-request-target-needs-exception" class="md-nav__link">
     <span class="md-ellipsis">
-      5. pull-request-target-needs-exception
+      4. pull-request-target-needs-exception
     </span>
   </a>
   
@@ -638,9 +599,7 @@
             </div>
         </section>
         <section class="print-page" id="index"><h1 id="index-github-source-solutions">GitHub Source Solutions</h1>
-<ul>
-<li><a href="#semgrep-rules">Google Specifc SemGrep Rules</a></li>
-</ul></section><section class="print-page" id="code-of-conduct"><h1 id="code-of-conduct-code-of-conduct">Code of Conduct</h1>
+<p>A collection of things we use to manage the Google Enterprise presence on GitHub.</p></section><section class="print-page" id="code-of-conduct"><h1 id="code-of-conduct-code-of-conduct">Code of Conduct</h1>
 <h2 id="code-of-conduct-our-pledge">Our Pledge</h2>
 <p>In the interest of fostering an open and welcoming environment, we as contributors and maintainers<br />
 pledge to making participation in our project and our community a harassment-free experience for<br />
@@ -727,11 +686,7 @@ project), you probably don't need to do it again.</p>
                         <h1 class='nav-section-title' id='section-semgrep-rules'>
                             Semgrep rules <a class='headerlink' href='#section-semgrep-rules' title='Permanent link'>↵</a>
                         </h1>
-                        <section class="print-page" id="semgrep-rules-index"><h1 id="semgrep-rules-index-index">Index</h1><h2 id="google-specifc-semgrep-rules">Google Specifc SemGrep Rules</h2>
-<p>These are the custom rules we've developed to help keep our enterprise safe on GitHub.</p>
-<ul>
-<li><a href="#semgrep-rules-pull-request-target-needs-exception">pull-request-target-needs-exception</a></li>
-</ul></section><section class="print-page" id="semgrep-rules-pull-request-target-needs-exception"><h1 id="semgrep-rules-pull-request-target-needs-exception-pull-request-target-needs-exception">pull-request-target-needs-exception</h1>
+                        <section class="print-page" id="semgrep-rules-pull-request-target-needs-exception"><h1 id="semgrep-rules-pull-request-target-needs-exception-pull-request-target-needs-exception">pull-request-target-needs-exception</h1>
 <p>If you can, prefer using <code>pull_request</code> or other triggers instead of <code>pull_request_target</code>. The<br />
 tl;dr here motivation is that workflows run from <code>pull_request_target</code> have (by default) read/write<br />
 acesss to the repository and access to the secrets, even when run from a fork. If the workflow then<br />
