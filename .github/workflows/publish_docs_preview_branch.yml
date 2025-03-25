@@ -12,12 +12,19 @@ permissions:
   pages: 'write'
   id-token: 'write'
 
+
 jobs:
   stage:
     name: "Stage PR preview from branch to pages"
     runs-on: 'ubuntu-latest'
     steps:
     - uses: 'actions/checkout@v4'
+      with:
+        ref: 'refs/heads/gh-pages'
+    - name: 'Upload artifact'
+      uses: 'actions/upload-pages-artifact@v3'
+      with:
+        path: '.'
   deploy:
     name: "Deploy PR Preview from branch to pages"
     needs: 'stage'
