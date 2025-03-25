@@ -1,0 +1,24 @@
+name: 'Publish Preview of Docs Site'
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  pages: 'write'
+  id-token: 'write'
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: 'actions/checkout@v4'
+    - name: 'Generate HTML from Markdown'
+      uses: 'ldeluigi/markdown-docs@latest'
+      with:
+        src: 'docs'
+        dst: 'generated-pages'
+    - name: 'Deploy GitHub Pages Preview'
+      uses: rossjrw/pr-preview-action@v1
+      with:
+        source-dir: './generated-pages/'
