@@ -2,11 +2,16 @@ name: 'Publish Preview of Docs Site'
 
 on:
   pull_request:
-  workflow_dispatch:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
 
 permissions:
   pages: 'write'
   id-token: 'write'
+  contents: 'write'
 
 jobs:
   build:
