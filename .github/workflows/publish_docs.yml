@@ -16,8 +16,8 @@ jobs:
     - name: 'Generate HTML from Markdown'
       uses: 'ldeluigi/markdown-docs@latest'
       with:
-        src: 'doc'
-        dst: 'generated'
+        src: 'docs'
+        dst: 'generated-pages'
     - name: 'Upload artifact'
       uses: 'actions/upload-pages-artifact@v3'
   deploy:
@@ -30,3 +30,5 @@ jobs:
       - name: 'Deploy to GitHub Pages'
         id: 'deployment'
         uses: 'actions/deploy-pages@v4'
+        with:
+          path: 'generated-pages'
