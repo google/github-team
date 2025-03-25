@@ -1,5 +1,5 @@
 name: 'Publish Preview of Docs Site from branch'
-# The publish_docs_preview.yml workflow takes a PR and publishes the results to it's own branch 
+# The publish_docs_preview.yml workflow takes a PR and publishes the results to it's own branch
 # so users can preview it.  But that git branch then needs some way to publish, so this action does that.
 on:
   push:
