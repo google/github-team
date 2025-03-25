@@ -1,20 +1,16 @@
 ### Ensure that Yaml files are properly formatted
 name: 'Check Yaml Format'
-
 on:
-  pull_request: 
+  pull_request:
     paths:
       - '**.yml'
       - '**.yaml'
-
 jobs:
   yamlfmt:
     name: 'yamlfmt'
     runs-on: 'ubuntu-latest'
-
     steps:
       - name: 'Checkout Code'
         uses: 'actions/checkout@v4'
-
       - name: 'Check Yaml Format'
-        run: 'tools/yamlfmt --lint --dstar "**/*.yaml"'
+        run: 'tools/yamlfmt --lint --dstar "**/*.yaml" "**/*.yml"'
