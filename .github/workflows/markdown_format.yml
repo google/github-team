@@ -16,4 +16,4 @@ jobs:
         uses: 'actions/checkout@v4'
 
       - name: 'Check Markdown Format'
-        run: 'pipx run mdformat --check --wrap 100 .'
+        run: 'tools/mdformat --check --wrap 100 .'

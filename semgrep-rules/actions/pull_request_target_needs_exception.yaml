@@ -7,7 +7,7 @@ rules:
     metadata:
       category: best-practice
       technology:
-        - github-actions      
+        - github-actions
     patterns:
       - pattern-either:
           - patterns:
