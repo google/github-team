@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: "Build Docs"
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-24.04'
     steps:
     - uses: 'actions/checkout@v4'
     - name: 'Generate HTML from Markdown'
@@ -30,7 +30,7 @@ jobs:
     environment:
       name: 'github-pages'
       url: '${{ steps.deployment.outputs.page_url }}'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-24.04'
     needs: 'build'
     steps:
       - name: 'Deploy to GitHub Pages'

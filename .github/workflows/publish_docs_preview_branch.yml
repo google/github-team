@@ -16,7 +16,7 @@ permissions:
 jobs:
   stage:
     name: "Stage PR preview from branch to pages"
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-24.04'
     steps:
     - uses: 'actions/checkout@v4'
       with:
@@ -31,7 +31,7 @@ jobs:
     environment:
       name: 'gh-pages-pr-preview'
       url: '${{ steps.deployment.outputs.page_url }}'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-24.04'
     steps:
       - name: 'Deploy to GitHub Pages'
         id: 'deployment'

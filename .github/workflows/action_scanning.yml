@@ -12,7 +12,7 @@ permissions:
 jobs:
   semgrep:
     name: 'semgrep-oss/scan'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-24.04'
 
     container:
       image: 'index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89' # ratchet:semgrep/semgrep
