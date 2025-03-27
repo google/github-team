@@ -1,0 +1,20 @@
+### Ensure that our local testing always passes
+name: 'Run semgrep tests'
+on:
+  pull_request: {}
+permissions:
+  contents: 'read'
+  actions: 'read'
+jobs:
+  semgrep-tests:
+    name: 'Run semgrep tests'
+    runs-on: 'ubuntu-latest'
+    container:
+      image: index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89 # ratchet:semgrep/semgrep
+    # Skip any PR created by dependabot to avoid permission issues:
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      - name: 'Checkout Code'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - name: 'Run Actions semgrep scan'
+        run: 'semgrep --test --config semgrep-rules semgrep-tests'

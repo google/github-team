@@ -3,11 +3,13 @@ rules:
     languages:
       - yaml
     severity: ERROR
-    message: pull_request_target is considered very risky and should only be used when strictly needed.  Please prefer other triggers when possible.  If you think this is needed, you can dismiss this alert and merge your PR.
+    message: 'pull_request_target is considered very risky and should only be used when strictly needed.  Please
+      prefer other triggers when possible.  If you think this is needed, you can dismiss this alert and
+      merge your PR.  More information: https://google.github.io/github-team/semgrep-rules/pull-request-target-needs-exception.html'
     metadata:
       category: best-practice
       technology:
-        - github-actions      
+        - github-actions
     patterns:
       - pattern-either:
           - patterns:
