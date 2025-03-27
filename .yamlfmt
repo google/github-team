@@ -1,0 +1,3 @@
+formatter:
+  max_line_length: 100
+  trim_trailing_whitespace: true
