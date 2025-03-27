@@ -15,17 +15,17 @@ jobs:
     name: "Build and Deploy Docs"
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: 'actions/checkout@v4'
-    - name: 'Generate HTML from Markdown'
-      uses: 'ldeluigi/markdown-docs@latest'
-      with:
-        src: 'docs'
-        dst: 'generated-pages'
-    - name: 'Install rsync'
-      run: 'apt-get update && apt-get install -y rsync'
-    - name: 'Deploy Docs'
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: generated-pages 
-        force: false
-        clean-exclude: pr-preview/
+      - uses: 'actions/checkout@v4'
+      - name: 'Generate HTML from Markdown'
+        uses: 'ldeluigi/markdown-docs@latest'
+        with:
+          src: 'docs'
+          dst: 'generated-pages'
+      - name: 'Install rsync'
+        run: 'apt-get update && apt-get install -y rsync'
+      - name: 'Deploy Docs'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: generated-pages
+          force: false
+          clean-exclude: pr-preview/
