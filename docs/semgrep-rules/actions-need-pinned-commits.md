@@ -6,9 +6,13 @@ For actions that look like:
 uses: actions/checkout@v4
 ```
 
-GitHub uses the underlying git label v4 to fetch the action to run. As seen in the [tj-actions/changed-files](https://semgrep.dev/blog/2025/popular-github-action-tj-actionschanged-files-is-compromised/) vulnerabilty, these lables are not immutable and trivially changeable. So what you think is a nice stable safe version, an attacker has changed behind your back to something nefarious.
+GitHub uses the underlying git label v4 to fetch the action to run. As seen in the
+[tj-actions/changed-files](https://semgrep.dev/blog/2025/popular-github-action-tj-actionschanged-files-is-compromised/)
+vulnerabilty, these lables are not immutable and trivially changeable. So what you think is a nice
+stable safe version, an attacker has changed behind your back to something nefarious.
 
-We are strongly encouraging use to use the full git commit hash instead to prevent this type of attacks.
+We are strongly encouraging use to use the full git commit hash instead to prevent this type of
+attacks.
 
 ## Ratchet
 
