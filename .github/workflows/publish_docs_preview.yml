@@ -14,13 +14,13 @@ jobs:
     name: "Build PR Preview Docs"
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v4'
+      - uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
       - name: 'Generate HTML from Markdown'
-        uses: 'ldeluigi/markdown-docs@latest'
+        uses: 'ldeluigi/markdown-docs@e51f9a21070db6a21dfbe27ac92f065823e006a1' # ratchet:ldeluigi/markdown-docs@latest
         with:
           src: 'docs'
           dst: 'generated-pages'
       - name: 'Deploy GitHub Pages Preview'
-        uses: rossjrw/pr-preview-action@v1
+        uses: rossjrw/pr-preview-action@df22037db54ab6ee34d3c1e2b8810ac040a530c6 # ratchet:rossjrw/pr-preview-action@v1
         with:
           source-dir: './generated-pages/'

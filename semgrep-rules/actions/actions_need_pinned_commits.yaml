@@ -1,0 +1,18 @@
+rules:
+  - id: actions-need-pinned-commits
+    languages:
+      - yaml
+    severity: WARNING
+    message: 'Referencing an action to run by git tag is risky, due to the mutability of git tags.  Prefer
+      to use full git SHAs instead.  More information: https://google.github.io/github-team/semgrep-rules/actions-need-pinned-commits.html'
+    metadata:
+      category: best-practice
+      technology:
+        - github-actions
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-inside: "{steps: ...}"
+              # Match all uses patterns that don't contain the full SHA1 hash.  Yes, short hashes exist but suffer from a similar (but slightly harder) attack vector by purposely crafting a colliding SHA.
+              - pattern: "uses: ..."
+              - pattern-not-regex: ".*@[0-9A-Fa-f]{40}.*"
