@@ -1,0 +1,2 @@
+#!/bin/sh
+docker run -it --rm -v "${PWD}:${PWD}" -w "${PWD}" ghcr.io/sethvargo/ratchet:latest $*
