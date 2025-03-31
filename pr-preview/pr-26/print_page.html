@@ -729,8 +729,12 @@ project), you probably don't need to do it again.</p>
 <p>For actions that look like:</p>
 <div class="highlight"><pre><span></span><code>uses: actions/checkout@v4
 </code></pre></div>
-<p>GitHub uses the underlying git label v4 to fetch the action to run. As seen in the <a href="https://semgrep.dev/blog/2025/popular-github-action-tj-actionschanged-files-is-compromised/">tj-actions/changed-files</a> vulnerabilty, these lables are not immutable and trivially changeable. So what you think is a nice stable safe version, an attacker has changed behind your back to something nefarious.</p>
-<p>We are strongly encouraging use to use the full git commit hash instead to prevent this type of attacks.</p>
+<p>GitHub uses the underlying git label v4 to fetch the action to run. As seen in the<br />
+<a href="https://semgrep.dev/blog/2025/popular-github-action-tj-actionschanged-files-is-compromised/">tj-actions/changed-files</a><br />
+vulnerabilty, these lables are not immutable and trivially changeable. So what you think is a nice<br />
+stable safe version, an attacker has changed behind your back to something nefarious.</p>
+<p>We are strongly encouraging use to use the full git commit hash instead to prevent this type of<br />
+attacks.</p>
 <h2 id="semgrep-rules-actions-need-pinned-commits-ratchet">Ratchet</h2>
 <p><a href="https://github.com/sethvargo/ratchet">Ratchet</a> provides an easy way to do this.</p>
 <p>You can pin all your workflow files like this:</p>
