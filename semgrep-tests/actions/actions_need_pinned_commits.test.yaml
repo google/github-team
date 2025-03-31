@@ -8,7 +8,9 @@ jobs:
         # ruleid: actions-need-pinned-commits
         uses: actions/checkout@v4
       - name: 'Step 2'
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683'
+      - name: 'Step 2.5'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4        
       - name: 'Step 3'
         # ruleid: actions-need-pinned-commits
         uses: 'actions/checkout@11bd719'
