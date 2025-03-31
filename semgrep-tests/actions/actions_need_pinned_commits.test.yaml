@@ -1,0 +1,17 @@
+name: 'Test Actions Needing Pinned Commits'
+on:
+  pull_request:
+jobs:
+  do-stuff:
+    steps:
+      - name: 'Step 1'
+        # ruleid: actions-need-pinned-commits
+        uses: actions/checkout@v4
+      - name: 'Step 2'
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - name: 'Step 3'
+        # ruleid: actions-need-pinned-commits
+        uses: 'actions/checkout@11bd719'
+      - name: 'Step 4'
+        # ruleid: actions-need-pinned-commits
+        uses: 'actions/checkout@my_git_label'
