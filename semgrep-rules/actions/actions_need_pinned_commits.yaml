@@ -4,7 +4,7 @@ rules:
       - yaml
     severity: WARNING
     message: 'Referencing an action to run by git tag is risky, due to the mutability of git tags.  Prefer
-      to use full git SHAs instead.  '
+      to use full git SHAs instead.  More information: https://google.github.io/github-team/semgrep-rules/actions-need-pinned-commits.html'
     metadata:
       category: best-practice
       technology:
