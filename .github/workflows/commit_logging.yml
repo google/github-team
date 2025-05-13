@@ -39,7 +39,7 @@ jobs:
         uses: 'google-github-actions/auth@2dd133ffa2bc779c0854b1999e993c416c87164b' # ratchet:google-github-actions/auth@v0.3.0
         with:
           access_token_lifetime: '900s'
-          workload_identity_provider: 'projects/bradegler-commit-log-exp-1b/locations/global/workloadIdentityPools/becle1b-wif-64840b/providers/becle1b-wif-64840b'
+          workload_identity_provider: 'projects/580543901798/locations/global/workloadIdentityPools/becle1b-wif-64840b/providers/becle1b-wif-64840b'
           service_account: 'github-automation-bot@bradegler-commit-log-exp-1b.iam.gserviceaccount.com'
           create_credentials_file: true
           activate_credentials_file: true
