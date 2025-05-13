@@ -1,0 +1,90 @@
+# Workflow to log commit information to a BigQuery table
+# BQ Schema:
+# [
+#     {
+#       "mode": "REQUIRED",
+#       "name": "commit_sha",
+#       "type": "STRING"
+#     },
+#     {
+#       "mode": "REQUIRED",
+#       "name": "commit_author",
+#       "type": "STRING"
+#     },
+#     {
+#       "mode": "REQUIRED",
+#       "name": "commit_message",
+#       "type": "STRING"
+#     },
+#     {
+#       "mode": "REQUIRED",
+#       "name": "commit_date_time",
+#       "type": "STRING"
+#     }
+#   ]
+name: 'commit_logging'
+on:
+  workflow_dispatch:
+jobs:
+  log_commits:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - id: 'checkout'
+        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@2dd133ffa2bc779c0854b1999e993c416c87164b' # ratchet:google-github-actions/auth@v0.3.0
+        with:
+          access_token_lifetime: '900s'
+          workload_identity_provider: 'projects/bradegler-commit-log-exp-1b/locations/global/workloadIdentityPools/becle1b-wif-64840b/providers/becle1b-wif-64840b'
+          service_account: 'github-automation-bot@bradegler-commit-log-exp-1b.iam.gserviceaccount.com'
+          create_credentials_file: true
+          activate_credentials_file: true
+      - uses: 'actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c' # ratchet:actions/setup-python@v4
+        with:
+          python-version: '3.11.2'
+      - name: 'install_dependencies'
+        shell: 'bash'
+        run: |
+          pip install google-cloud-bigquery
+      - name: 'read_commits'
+        shell: 'bash'
+        run: |-
+          git log --pretty=format:"%H%x7c%aE%x7c%s%x7c%ai%x7c" > data.psv
+          echo "commit_sha|commit_author|commit_message|commit_date_time|" > labels.psv
+
+          echo "{\"commits\": [" > output.psv
+          jq -nRc '
+              def objectify($keys):
+                  [$keys, .] | transpose | map({(.[0]): .[1]}) | add;
+
+              (input|split("|")) as $keys
+              | inputs | split("|") | objectify($keys)
+              | del(..|select(. == ""))
+              ' labels.psv data.psv | sed 's/}/},/g' | sed '$s/,$//' >> output.psv
+
+          echo "]}" >> output.psv
+      - name: 'read_log_write_bq'
+        shell: python {0}
+        run: |-
+          import json
+
+          from google.cloud import bigquery
+
+          table_id = "bradegler-commit-log-exp-1b.commit_log_exp.commit_log"
+
+          client = bigquery.Client(project='bradegler-commit-log-exp-1b')
+
+          with open('output.psv', 'r') as file:
+              data = json.load(file)
+
+              print(data["commits"])
+              errors = client.insert_rows_json(table_id, data["commits"])
+              if errors == []:
+                  print("New rows have been added.")
+              else:
+                  print("Encountered errors while inserting rows: {}".format(errors))
+                  exit(1)
