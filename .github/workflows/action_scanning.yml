@@ -8,6 +8,10 @@ on:
     - '.github/actions/**/*.yml'
     - '.github/actions/**/*.yaml'
 
+permissions:
+  contents: 'read'
+  actions: 'write' # Upload artifact
+
 jobs:
   scan-pr:
     permissions:
