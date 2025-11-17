@@ -1,4 +1,4 @@
-name: 'GitHub Admin: Actions Workflow Security Scan'
+name: 'Google GitHub Admin: Actions Workflow Security Scan'
 
 on:
   pull_request:
