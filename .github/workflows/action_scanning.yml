@@ -7,6 +7,21 @@ on:
     - '.github/workflows/**/*.yaml'
     - '.github/actions/**/*.yml'
     - '.github/actions/**/*.yaml'
+env:
+  ACTIONS_SUITE_CONTENT: |
+    - qlpack: codeql/actions-queries
+    - include:
+        id: actions/envvar-injection/critical
+    - include:
+        id: actions/envpath-injection/critical
+    - include:
+        id: actions/cache-poisoning/poisonable-step
+    - include:
+        id: actions/artifact-poisoning/critical
+    - include:
+        id: actions/untrusted-checkout/critical
+    - include:
+        id: actions/untrusted-checkout/high
 
 permissions:
   contents: 'read'
@@ -31,12 +46,22 @@ jobs:
         else
           echo "workflow_files_found=false" >> "$GITHUB_OUTPUT"
         fi
+
+    - name: 'Create CodeQL Query Suite'
+      if: "steps.check_files.outputs.workflow_files_found == 'true'"
+      run: 'echo "${{ env.ACTIONS_SUITE_CONTENT }}" > actions-suite.qls'
+
     - name: 'Initialize CodeQL'
       if: "steps.check_files.outputs.workflow_files_found == 'true'"
       uses: 'google/codeql-action/init@014f16e7ab1402f30e7c3329d33797e7948572db' # ratchet:google/codeql-action/init@v4
       with:
         languages: 'actions'
-        queries: 'security-extended'
+        config: |
+          name: 'Custom Action Scan'
+          disable-default-queries: true
+          queries:
+            - uses: ./actions-suite.qls
+
     - name: 'Perform CodeQL Analysis'
       if: "steps.check_files.outputs.workflow_files_found == 'true'"
       id: 'codeql_analysis'
