@@ -1,39 +1,98 @@
-### Required actions to scan GitHub action workflows for security issues.
-name: 'Scan GitHub Action workflows files for security issues'
+name: 'Google GitHub Admin: Actions Workflow Security Scan'
+
 on:
-  pull_request: {}
+  pull_request:
+    paths:
+    - '.github/workflows/**/*.yml'
+    - '.github/workflows/**/*.yaml'
+    - '.github/actions/**/*.yml'
+    - '.github/actions/**/*.yaml'
+env:
+  ACTIONS_SUITE_CONTENT: |
+    - qlpack: codeql/actions-queries
+    - include:
+        id: actions/envvar-injection/critical
+    - include:
+        id: actions/envpath-injection/critical
+    - include:
+        id: actions/cache-poisoning/poisonable-step
+    - include:
+        id: actions/artifact-poisoning/critical
+    - include:
+        id: actions/untrusted-checkout/critical
+    - include:
+        id: actions/untrusted-checkout/high
+
 permissions:
   contents: 'read'
-  security-events: 'write'
-  actions: 'read'
+  actions: 'write' # Upload artifact
+
 jobs:
-  semgrep:
-    name: 'semgrep-oss/scan'
+  scan-pr:
+    permissions:
+      contents: 'read'
+    if: "github.event_name == 'pull_request'"
     runs-on: 'ubuntu-latest'
-    container:
-      image: 'index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89' # ratchet:semgrep/semgrep
-    # Skip any PR created by dependabot to avoid permission issues:
-    if: (github.actor != 'dependabot[bot]')
     steps:
-      - name: 'Checkout Code'
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
-      - name: 'Checkout Workflow Config'
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
-        env:
-          GH_REPO_OWNER: ${{ github.repository_owner }}
-        with:
-          repository: 'google/github-team'
-          path: action_scanning
-      - name: 'Run Actions semgrep scan'
-        run: 'semgrep scan --sarif --config action_scanning/semgrep-rules --config "p/github-actions"
-          --sarif-output semgrep-results-actions.sarif || true'
-      - name: 'Save Actions SARIF results as artifact'
-        uses: 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' # ratchet:actions/upload-artifact@v4
-        with:
-          name: 'semgrep-scan-results-actions'
-          path: 'semgrep-results-actions.sarif'
-      - name: 'Upload Actions SARIF result to the GitHub Security Dashboard'
-        uses: 'github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841' # ratchet:github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'semgrep-results-actions.sarif'
-        if: always()
+    - name: 'Checkout PR Code'
+      uses: 'actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8' # ratchet:actions/checkout@v5
+
+    - name: 'Check for Workflow Files'
+      id: 'check_files'
+      run: |
+        FOUND_FILES=$(find . -type f -regextype posix-extended -regex '\./\.github/(workflows|actions)/.*\.ya?ml' | head -n 1)
+        if [ -n "$FOUND_FILES" ]; then
+          echo "workflow_files_found=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "workflow_files_found=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: 'Create CodeQL Query Suite'
+      if: "steps.check_files.outputs.workflow_files_found == 'true'"
+      run: 'echo "${{ env.ACTIONS_SUITE_CONTENT }}" > actions-suite.qls'
+
+    - name: 'Initialize CodeQL'
+      if: "steps.check_files.outputs.workflow_files_found == 'true'"
+      uses: 'google/codeql-action/init@014f16e7ab1402f30e7c3329d33797e7948572db' # ratchet:google/codeql-action/init@v4
+      with:
+        languages: 'actions'
+        config: |
+          name: 'Custom Action Scan'
+          disable-default-queries: true
+          queries:
+            - uses: ./actions-suite.qls
+
+    - name: 'Perform CodeQL Analysis'
+      if: "steps.check_files.outputs.workflow_files_found == 'true'"
+      id: 'codeql_analysis'
+      uses: 'google/codeql-action/analyze@014f16e7ab1402f30e7c3329d33797e7948572db' # ratchet:google/codeql-action/analyze@v4
+      with:
+        upload: 'never'
+
+    - name: 'Check for Vulnerabilities and Set Status'
+      id: 'vuln_check'
+      if: "steps.check_files.outputs.workflow_files_found == 'true'"
+      run: |
+        SARIF_FILE="${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif"
+        if [ ! -f "$SARIF_FILE" ]; then
+          echo "SARIF file not found at $SARIF_FILE"
+          exit 1
+        fi
+        RESULT_COUNT=$(jq '.runs[0].results | length' "$SARIF_FILE")
+        if [ "$RESULT_COUNT" -gt 0 ]; then
+          echo "::error::CodeQL found $RESULT_COUNT potential vulnerabilities."
+          echo "---"
+          jq -r '.runs[0].results[] | ("Rule ID: " + .ruleId + "\nMessage: " + .message.text + "\nFile: " + .locations[0].physicalLocation.artifactLocation.uri + "\nLine: " + (.locations[0].physicalLocation.region.startLine | tostring) + "\n---")' "$SARIF_FILE"
+          exit 1
+        else
+          echo "No vulnerabilities found. Check passed."
+        fi
+
+    - name: 'Upload SARIF file on failure'
+      if: "failure() && steps.vuln_check.conclusion == 'failure'"
+      uses: 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' # ratchet:actions/upload-artifact@v4
+      with:
+        name: 'sarif-report'
+        path: '${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif'
+        retention-days: 1
+        overwrite: 'true'
