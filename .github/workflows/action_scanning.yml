@@ -99,3 +99,37 @@ jobs:
         path: '${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif'
         retention-days: 1
         overwrite: 'true'
+
+    - name: 'Explain Failures and Next Steps'
+      if: "failure() && steps.vuln_check.conclusion == 'failure'"
+      run: |
+        SARIF_FILE="${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif"
+        {
+          echo "### Security Scan Results"
+          echo ""
+          echo "This is an automated scan to check for common classes of GitHub Actions security bugs."
+          echo "The checks are currently in **evaluate mode**. Merging is still possible with a failing test, but please ensure there are no real vulnerabilities."
+          echo "If you believe this is a false positive, please contact us (see below)."
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        if [ -f "$SARIF_FILE" ]; then
+          echo "#### Findings" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '.runs[0].results[] | "- **" + .ruleId + "**: " + .message.text + " (" + .locations[0].physicalLocation.artifactLocation.uri + ":" + (.locations[0].physicalLocation.region.startLine | tostring) + ")"' "$SARIF_FILE" >> "$GITHUB_STEP_SUMMARY"
+        else
+           echo "SARIF file not found, cannot list specific failures." >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        {
+          echo ""
+          echo "#### Documentation"
+          echo "- [Untrusted Checkout (High)](https://codeql.github.com/codeql-query-help/actions/actions-untrusted-checkout-high/)"
+          echo "- [Artifact Poisoning (Critical)](https://codeql.github.com/codeql-query-help/actions/actions-artifact-poisoning-critical/)"
+          echo "- [Cache Poisoning (Poisonable Step)](https://codeql.github.com/codeql-query-help/actions/actions-cache-poisoning-poisonable-step/)"
+          echo "- [Envpath Injection (Critical)](https://codeql.github.com/codeql-query-help/actions/actions-envpath-injection-critical/)"
+          echo "- [Envvar Injection (Critical)](https://codeql.github.com/codeql-query-help/actions/actions-envvar-injection-critical/)"
+          echo ""
+          echo "#### Contact"
+          echo "- **External users**: opensource@google.com"
+          echo "- **Internal users**: go/github-requests (File a bug)"
+        } >> "$GITHUB_STEP_SUMMARY"
