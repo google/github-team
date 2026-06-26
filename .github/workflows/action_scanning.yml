@@ -7,7 +7,7 @@ on:
     - '.github/workflows/**/*.yaml'
     - '.github/actions/**/*.yml'
     - '.github/actions/**/*.yaml'
-env:
+env: 
   ACTIONS_SUITE_CONTENT: |
     - qlpack: codeql/actions-queries
     - include:
