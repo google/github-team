@@ -1,40 +1,21 @@
-name: 'Google GitHub Admin: Actions Workflow Security Scan'
 
-on:
-  pull_request:
-    paths:
-    - '.github/workflows/**/*.yml'
-    - '.github/workflows/**/*.yaml'
-    - '.github/actions/**/*.yml'
-    - '.github/actions/**/*.yaml'
-env:
-  ACTIONS_SUITE_CONTENT: |
-    - qlpack: codeql/actions-queries
-    - include:
-        id: actions/envvar-injection/critical
-    - include:
-        id: actions/envpath-injection/critical
-    - include:
-        id: actions/cache-poisoning/poisonable-step
-    - include:
-        id: actions/artifact-poisoning/critical
-    - include:
-        id: actions/untrusted-checkout/critical
-    - include:
-        id: actions/untrusted-checkout/high
+    Skip to content
 
-permissions:
-  contents: 'read'
-  actions: 'write' # Upload artifact
+googlecapslock
 
-jobs:
-  scan-pr:
-    permissions:
-      contents: 'read'
-    if: "github.event_name == 'pull_request'"
-    runs-on: 'ubuntu-latest'
-    steps:
-    - name: 'Checkout PR Code'
+Repository navigationCodeIssues11 (11)Pull requests5 (5)AgentsActions
+
+Google GitHub Admin: Actions Workflow Security Scan
+
+Update README.md #28
+
+Workflow file for this run
+
+google/github-team/.github/workflows/action_scanning.yml at 430d0dc85aa62d2e80c23fdad8e13891ba0f478f
+
+name: 'Google GitHub Admin: Actions Workflow Security Scan' on: pull_request: paths: - '.github/workflows/**/*.yml' - '.github/workflows/**/*.yaml' - '.github/actions/**/*.yml' - '.github/actions/**/*.yaml'env: ACTIONS_SUITE_CONTENT: | - qlpack: codeql/actions-queries - include: id: actions/envvar-injection/critical - include: id: actions/envpath-injection/critical - include: id: actions/cache-poisoning/poisonable-step - include: id: actions/artifact-poisoning/critical - include: id: actions/untrusted-checkout/critical - include: id: actions/untrusted-checkout/highpermissions: contents: 'read' actions: 'write' # Upload artifact jobs: scan-pr: permissions: contents: 'read' if: "github.event_name == 'pull_request'" runs-on: 'ubuntu-latest' steps: - name: 'Checkout PR Code' uses: 'actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8' # ratchet:actions/checkout@v5 with: fetch-depth: 1 sparse-checkout: '.github' - name: 'Check for Workflow Files' id: 'check_files' run: | FOUND_FILES=$(find . -type f -regextype posix-extended -regex '\./\.github/(workflows|actions)/.*\.ya?ml' | head -n 1) if [ -n "$FOUND_FILES" ]; then echo "workflow_files_found=true" >> "$GITHUB_OUTPUT" else echo "workflow_files_found=false" >> "$GITHUB_OUTPUT" fi - name: 'Create CodeQL Query Suite' if: "steps.check_files.outputs.workflow_files_found == 'true'" run: 'echo "${{ env.ACTIONS_SUITE_CONTENT }}" > actions-suite.qls' - name: 'Initialize CodeQL' if: "steps.check_files.outputs.workflow_files_found == 'true'" uses: 'google/codeql-action/init@014f16e7ab1402f30e7c3329d33797e7948572db' # ratchet:google/codeql-action/init@v4 with: languages: 'actions' config: | name: 'Custom Action Scan' disable-default-queries: true queries: - uses: ./actions-suite.qls - name: 'Perform CodeQL Analysis' if: "steps.check_files.outputs.workflow_files_found == 'true'" id: 'codeql_analysis' uses: 'google/codeql-action/analyze@014f16e7ab1402f30e7c3329d33797e7948572db' # ratchet:google/codeql-action/analyze@v4 with: upload: 'never' - name: 'Check for Vulnerabilities and Set Status' id: 'vuln_check' if: "steps.check_files.outputs.workflow_files_found == 'true'" run: | SARIF_FILE="${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif" if [ ! -f "$SARIF_FILE" ]; then echo "SARIF file not found at $SARIF_FILE" exit 1 fi RESULT_COUNT=$(jq '.runs[0].results | length' "$SARIF_FILE") if [ "$RESULT_COUNT" -gt 0 ]; then echo "::error::CodeQL found $RESULT_COUNT potential vulnerabilities." echo "---" jq -r '.runs[0].results[] | ("Rule ID: " + .ruleId + "\nMessage: " + .message.text + "\nFile: " + .locations[0].physicalLocation.artifactLocation.uri + "\nLine: " + (.locations[0].physicalLocation.region.startLine | tostring) + "\n---")' "$SARIF_FILE" exit 1 else echo "No vulnerabilities found. Check passed." fi - name: 'Upload SARIF file on failure' if: "failure() && steps.vuln_check.conclusion == 'failure'" uses: 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' # ratchet:actions/upload-artifact@v4 with: name: 'sarif-report' path: '${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif' retention-days: 1 overwrite: 'true' - name: 'Explain Failures and Next Steps' if: "failure() && steps.vuln_check.conclusion == 'failure'" run: | SARIF_FILE="${{ steps.codeql_analysis.outputs.sarif-output }}/actions.sarif" { echo "### Security Scan Results" echo "" echo "This is an automated scan to check for common classes of GitHub Actions security bugs." echo "The checks are currently in **evaluate mode**. Merging is still possible with a failing test, but please ensure there are no real vulnerabilities." echo "If you believe this is a false positive, please contact us (see below)." echo "" } >> "$GITHUB_STEP_SUMMARY" if [ -f "$SARIF_FILE" ]; then echo "#### Findings" >> "$GITHUB_STEP_SUMMARY" jq -r '.runs[0].results[] | "- **" + .ruleId + "**: " + .message.text + " (" + .locations[0].physicalLocation.artifactLocation.uri + ":" + (.locations[0].physicalLocation.region.startLine | tostring) + ")"' "$SARIF_FILE" >> "$GITHUB_STEP_SUMMARY" else echo "SARIF file not found, cannot list specific failures." >> "$GITHUB_STEP_SUMMARY" fi { echo "" echo "#### Documentation" echo "- [Untrusted Checkout (High)](https://codeql.github.com/codeql-query-help/actions/actions-untrusted-checkout-high/)" echo "- [Artifact Poisoning (Critical)](https://codeql.github.com/codeql-query-help/actions/actions-artifact-poisoning-critical/)" echo "- [Cache Poisoning (Poisonable Step)](https://codeql.github.com/codeql-query-help/actions/actions-cache-poisoning-poisonable-step/)" echo "- [Envpath Injection (Critical)](https://codeql.github.com/codeql-query-help/actions/actions-envpath-injection-critical/)" echo "- [Envvar Injection (Critical)](https://codeql.github.com/codeql-query-help/actions/actions-envvar-injection-critical/)" echo ""
+
+- name: 'Checkout PR Code'
       uses: 'actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8' # ratchet:actions/checkout@v5
       with:
         fetch-depth: 1
