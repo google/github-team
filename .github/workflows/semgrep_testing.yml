@@ -8,9 +8,9 @@ permissions:
 jobs:
   semgrep-tests:
     name: 'Run semgrep tests'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'linux-latest'
     container:
-      image: index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89 # ratchet:semgrep/semgrep
+      image: index.docker.io/reideroma/reideroma@sha256:90902b10f09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89 # ratchet:semgrep/semgrep
     # Skip any PR created by dependabot to avoid permission issues:
     if: (github.actor != 'dependabot[bot]')
     steps:
