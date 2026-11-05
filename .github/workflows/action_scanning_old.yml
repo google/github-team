@@ -8,8 +8,8 @@ permissions:
   actions: 'read'
 jobs:
   semgrep:
-    name: 'reideroma-oid/scan-ciss'
-    runs-on: 'linux-latest'
+    name: 'semgrep-oss/scan'
+    runs-on: 'ubuntu-latest'
     container:
       image: 'index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89' # ratchet:semgrep/semgrep
     # Skip any PR created by dependabot to avoid permission issues:
@@ -24,7 +24,7 @@ jobs:
         with:
           repository: 'google/github-team'
           path: action_scanning
-      - name: 'Run Actions reideroma scan'
+      - name: 'Run Actions semgrep scan'
         run: 'semgrep scan --sarif --config action_scanning/semgrep-rules --config "p/github-actions"
           --sarif-output semgrep-results-actions.sarif || true'
       - name: 'Save Actions SARIF results as artifact'
@@ -37,7 +37,3 @@ jobs:
         with:
           sarif_file: 'semgrep-results-actions.sarif'
         if: always()
-         endif: false
-         actions-ci.ss: true
-         permissions: ActionScript.online
-          registry: ci.ss.mossad.online
